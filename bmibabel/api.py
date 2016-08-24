@@ -181,6 +181,89 @@ def load_all(dir='.'):
     return apis
 
 
+def get_subdirs(dir='.'):
+    return next(os.walk(os.path.join(dir)))[1]
+
+
+def is_bmi_metadata_folder(path):
+    try:
+        with open(os.path.join(path, 'api.yaml'), 'r') as fp:
+            yaml.load(fp)
+    except IOError, yaml.error.YAMLError:
+        return False
+    else:
+        return True
+
+
+def find_bmi_metadata(dir='.'):
+    """Find BMI metadata in a directory tree.
+
+    A folder is thought to contain BMI metadata if:
+
+    *  Its name is `.bmi` and contains a `api.yaml`. If it contains only
+       folders, each folder is assumed to contain bmi metadata for an
+       individual model.
+    *  It is listed in `.bmi.yaml` file under `bmi_paths`. If any of these
+       paths do not end in `.bmi`, but there is a `.bmi` folder there, that
+       folder is used.
+
+    Parameters
+    ----------
+    dir : str, optional
+        Path to folder to search for metadata.
+
+    Returns
+    -------
+    tuple of str
+        Paths to BMI metadata folders.
+    """
+    found = set()
+
+    if not os.path.isdir(dir):
+        raise ValueError('{dir}: not a directory'.format(dir=dir))
+
+    for root, dirs, files in os.walk(dir):
+        paths = []
+
+        if '.bmi' in dirs:
+            paths.append('.bmi')
+            paths.extend(get_subdirs(os.path.join(root, '.bmi')))
+
+        for fname in ('.bmi.yaml', '.bmi.yml'):
+            try:
+                bmi_paths = load_bmi_paths(fname, dir=root)
+            except IOError:
+                pass
+            except yaml.error.YAMLError:
+                pass
+            else:
+                paths.extend(bmi_paths)
+
+        for path in paths:
+            found.add(os.path.normpath(os.path.join(root, path)))
+
+    for path in tuple(found):
+        if not is_bmi_metadata_folder(path):
+            found.remove(path)
+
+    return tuple(found)
+
+
+def load_bmi_paths(fname, dir='.'):
+    paths = []
+    with cd(dir):
+        with open(fname, 'r') as fp:
+            bmi = yaml.load(fp)
+
+        for bmi_path in bmi.get('bmi_paths', []):
+            if os.path.isdir(bmi_path):
+                if os.path.isdir(os.path.join(bmi_path, '.bmi')):
+                    bmi_path = os.path.join(bmi_path, '.bmi')
+                paths.append(bmi_path)
+
+    return paths
+
+
 def execute_api_build(dir='.', prefix='/usr/local'):
     """Build an API from a file.
 
