@@ -112,6 +112,13 @@ def _get_bmi_from_repo(repo, prefix='/usr/local', build_api=False):
 
 
 def fetch_bmi_components(repos, install_prefix='/usr/local', build_api=False):
+    proj = load_bmi_components(repos, install_prefix=install_prefix,
+                               build_api=False)
+
+    return yaml.dump(proj, default_flow_style=False)
+
+
+def load_bmi_components(repos, install_prefix='/usr/local', build_api=False):
     proj = empty_bmi_project()
     for repo in repos:
         try:
@@ -123,4 +130,4 @@ def fetch_bmi_components(repos, install_prefix='/usr/local', build_api=False):
         except ParseError as err:
             warnings.warn('Skipping %s: parse error (%s)' % (repo, err))
 
-    return yaml.dump(proj, default_flow_style=False)
+    return proj
