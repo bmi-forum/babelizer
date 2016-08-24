@@ -2,13 +2,15 @@
 """Some bocca utilities."""
 
 import os
+import sys
 import types
 import re
 import shutil
 import glob
 from string import Template
 
-from .utils import cd, mktemp, which, system, check_output
+from .utils import (cd, mktemp, which, system, check_output, mkdir_p, glob_cp,
+                    glob_sub)
 from .errors import ProjectExistsError
 
 
@@ -21,6 +23,10 @@ _PATH_TO_IMPL = {
 }
 
 _PATH_TO_SIDL = os.path.join(_THIS_DIR, 'data')
+
+
+def normalize_class_name(name):
+    return ''.join([s[0].upper() + s[1:] for s in name.split('_')])
 
 
 class Bocca(object):
@@ -144,6 +150,10 @@ class Bocca(object):
 
         if not name.startswith('csdms.'):
             name = 'csdms.' + name
+
+        class_name = name.split('.')[-1]
+        name = '.'.join(name.split('.')[:-1] +
+                        [normalize_class_name(class_name)])
 
         kwds = dict(implements='csdms.core.Bmi', language=language)
         if impl is None:
@@ -677,3 +687,39 @@ def make_project(proj, clobber=False):
 
         for name, bmi in bmis.items():
             bocca.create_bmi_class(name, **bmi)
+
+    return os.path.abspath(proj['name'])
+
+
+def build_project(dir='.', prefix=None, install=False):
+    prefix = os.path.abspath(prefix or os.path.join(dir, 'install'))
+
+    libdir = os.path.join(prefix, 'lib')
+    sharedir = os.path.join(prefix, 'share')
+    site_packages = os.path.join(libdir, 'python2.7', 'site-packages')
+
+    if sys.platform == 'darwin':
+        os.environ['LDFLAGS'] = '-headerpad_max_install_names'
+
+    with cd(dir) as cwd:
+        system(['./configure', '--with-languages=python',
+                '--prefix={prefix}'.format(prefix=prefix)])
+        system(['make', 'all'])
+
+    if install:
+        with cd (dir) as cwd:
+            system(['make', 'install'])
+
+            libdir = mkdir_p(libdir)
+            sharedir = mkdir_p(os.path.join(sharedir, 'cca'))
+            site_packages = mkdir_p(os.path.join(site_packages, 'csdms'))
+
+            sub = (os.path.join(cwd, 'install'),
+                   os.path.abspath(prefix))
+            glob_sub('./install/share/cca/*.cca', sub)
+            glob_sub('./install/lib/libcsdms*la', sub)
+
+            glob_cp('./install/share/cca/*.cca', sharedir)
+            glob_cp('./install/lib/libcsdms*', libdir)
+            glob_cp('./install/lib/python2.7/site-packages/csdms/*py',
+                    site_packages)
