@@ -9,6 +9,8 @@ import subprocess
 import types
 import tempfile
 import shutil
+import glob
+import re
 
 from distutils.dir_util import mkpath
 
@@ -122,6 +124,48 @@ class mktemp(object):
     def __exit__(self, ex_type, ex_value, traceback):
         """Remove temporary directory."""
         shutil.rmtree(self._tmp_dir)
+
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as err:
+        if err.errno == os.errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
+
+    return os.path.abspath(path)
+
+
+def glob_cp(pattern, dest):
+    if not os.path.isdir(dest):
+        raise ValueError('{dest}: not a directory'.format(dest=dest))
+
+    for fname in glob.glob(pattern):
+        status('cp {src} {dest}'.format(src=fname, dest=dest))
+        shutil.copy2(fname, dest)
+
+
+def sub(fname, subs, inplace=False):
+    old, new = subs
+
+    with open(fname, 'r') as fp:
+        contents = fp.read()
+    contents = re.sub(old, new, contents)
+
+    if inplace:
+        shutil.copy2(fname, fname + '.bak')
+        with open(fname, 'w') as fp:
+            fp.write(contents)
+    else:
+        return contents
+
+
+def glob_sub(pattern, subs):
+    old, new = subs
+    for fname in glob.glob(pattern):
+        sub(fname, (old, new), inplace=True)
 
 
 def status(message):
