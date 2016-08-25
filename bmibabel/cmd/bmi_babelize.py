@@ -35,17 +35,10 @@ def add_arguments(parser):
                         help='Path to BMI metadta.')
     parser.add_argument('--prefix', type=str, default='/usr/local/csdms',
                         help='Prefix for installation')
-    # parser.add_argument('--no-build', dest='build_api', action='store_false',
-    #                     default=True,
-    #                     help='Get API info but do not build')
-    # parser.add_argument('--file', type=str, default=None,
-    #                     help='Repos file')
-    # parser.add_argument('--output', type=str, default=None,
-    #                     help='Copy metadata files to a folder')
-    parser_babelize.add_argument(
+    parser.add_argument(
         '--no-build', dest='build', action='store_false',
         help='stage project but do not build')
-    parser_babelize.add_argument(
+    parser.add_argument(
         '--no-install', dest='install', action='store_false',
         help='stage and build project but do not install')
 
