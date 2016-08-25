@@ -23,7 +23,14 @@ from ..bocca import make_project, build_project, ProjectExistsError
 
 def main():
     parser = argparse.ArgumentParser()
+    add_arguments(parser)
 
+    args = parser.parse_args()
+
+    babelize(args)
+
+
+def add_arguments(parser):
     parser.add_argument('path', type=str, nargs='+',
                         help='Path to BMI metadta.')
     parser.add_argument('--prefix', type=str, default='/usr/local/csdms',
@@ -36,8 +43,8 @@ def main():
     parser.add_argument('--output', type=str, default=None,
                         help='Copy metadata files to a folder')
 
-    args = parser.parse_args()
 
+def babelize(args):
     # repos = args.repo
     # if args.file:
     #     repos += scan_repos_from_file(args.file)

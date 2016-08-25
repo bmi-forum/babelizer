@@ -45,6 +45,7 @@ setup(
             'bmi-babel-fetch=bmibabel.cmd.bmi_babel_fetch:main',
             'bmi-babel-find=bmibabel.cmd.bmi_babel_find:main',
             'bmi-babel-build=bmibabel.cmd.bmi_babel_build:main',
+            'bmi=bmibabel.cmd.bmi:main',
         ],
     },
 
