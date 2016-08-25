@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-from .bmi_babel_build import babelize, add_arguments
+from .bmi_babelize import babelize, add_arguments
 
 
 def find(args):
@@ -11,9 +11,6 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser()
-
-    # parser.add_argument('PATH', nargs='+',
-    #                     help='paths to BMI metadata')
 
     subparsers = parser.add_subparsers(title='subcommands',
                                        description='valid commands',
@@ -28,5 +25,5 @@ def main():
     parser_babelize.set_defaults(func=babelize)
 
     args = parser.parse_args()
-    print(args)
+
     rtn = args.func(args)
