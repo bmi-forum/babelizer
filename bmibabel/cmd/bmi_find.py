@@ -23,12 +23,19 @@ from ..errors import MissingFileError, ParseError
 def main():
     """Look for BMI metadata in a folder."""
     parser = argparse.ArgumentParser()
-
-    parser.add_argument('path', type=str, nargs='+',
-                        help='Search paths')
+    add_arguments(parser)
 
     args = parser.parse_args()
 
+    find(args)
+
+
+def add_arguments(parser):
+    parser.add_argument('path', type=str, nargs='+',
+                        help='Search paths')
+
+
+def find(args):
     found = set()
     for path in args.path:
         found |= set(find_bmi_metadata(path))

@@ -43,7 +43,7 @@ setup(
         'console_scripts': [
             'bmi-babel-make=bmibabel.cmd.make:main',
             'bmi-babel-fetch=bmibabel.cmd.bmi_babel_fetch:main',
-            'bmi-babel-find=bmibabel.cmd.bmi_babel_find:main',
+            'bmi-find=bmibabel.cmd.bmi_find:main',
             'bmi-babelize=bmibabel.cmd.bmi_babelize:main',
             'bmi=bmibabel.cmd.bmi:main',
         ],
