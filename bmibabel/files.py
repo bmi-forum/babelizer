@@ -2,6 +2,8 @@
 import os
 import string
 
+from .utils import cd
+
 
 _METADATA_FILES = {
     'api.yaml', 'api.yml',

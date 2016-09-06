@@ -5,7 +5,7 @@ import string
 
 from .utils import mkdir_p, cd, is_text_file
 from .parameters import load
-from .files import find_bmi_data_files, fill_template_files
+from .files import find_bmi_data_files, fill_template_file
 
 
 def stage(path, dest):
