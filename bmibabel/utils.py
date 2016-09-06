@@ -11,6 +11,7 @@ import tempfile
 import shutil
 import glob
 import re
+import string
 
 from distutils.dir_util import mkpath
 
@@ -291,3 +292,29 @@ def read_first_of(files):
         except IOError:
             pass
     raise MissingFileError(', '.join(files))
+
+
+TEXT_CHARACTERS = ''.join(map(chr, range(32, 127)) + list("\n\r\t\b"))
+NULL_TRANS = string.maketrans("", "")
+
+
+def is_text_file(fname, block=1024):
+    """Check if a file is text or binary."""
+    with open(fname, 'r') as fp:
+        return is_text(fp.read(block))
+
+
+def is_text(buff):
+    """Check if a string is text or binary."""
+    if '\0' in buff:
+        return False
+
+    if len(buff) == 0:
+        return True
+
+    bin_chars = buff.translate(NULL_TRANS, TEXT_CHARACTERS)
+
+    if len(bin_chars) > len(buff) * 0.3:
+        return False
+
+    return True
