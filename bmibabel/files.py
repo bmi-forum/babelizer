@@ -84,8 +84,6 @@ def fill_template_file(src, dest, **kwds):
         (base, ext) = os.path.splitext(dest)
         if ext == '.tmpl':
             dest = base
-        else:
-            dest = fname
 
         with open(dest, 'w') as fp:
             fp.write(sub_parameters(template, **kwds))
