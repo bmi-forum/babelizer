@@ -19,6 +19,7 @@ from ..project import empty_bmi_project, add_bmi_component
 from .. import api
 from ..errors import MissingFileError, ParseError
 from ..bocca import make_project, build_project, ProjectExistsError
+from ..stage import copy_data_files
 
 
 def main():
@@ -50,7 +51,7 @@ def babelize(args):
                 except KeyError:
                     print(bmi)
                 else:
-                    glob_cp(os.path.join(bmi['path'], '*'), datadir)
+                    copy_data_files(bmi['path'], datadir)
 
 
 def create_parser(addto=None):
