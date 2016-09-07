@@ -38,7 +38,9 @@ def copy_data_files(datadir, destdir, **kwds):
             if dir:
                 mkdir_p(dir)
 
-            if is_text_file(path_to_src):
-                fill_template_file(path_to_src, data_file, **kwds)
-            else:
-                shutil.copy2(path_to_src, data_file)
+            if os.path.isfile(path_to_src):
+                if is_text_file(path_to_src):
+                    fill_template_file(path_to_src, data_file, **kwds)
+                else:
+                    shutil.copy2(path_to_src, data_file)
+
