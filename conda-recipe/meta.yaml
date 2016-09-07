@@ -1,0 +1,51 @@
+package:
+  name: bmi-babel
+  version: {{"0.1.0" + environ.get('BUILD_STR', '')}}
+
+source:
+  path: ..
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - pyyaml
+    - nose
+    - cca-bocca
+    - pexpect
+
+  run:
+    - python
+    - setuptools
+    - pyyaml
+    - nose
+    - cca-bocca
+    - pkgconfig-command [osx]
+    - pexpect
+
+test:
+  imports:
+    - bmibabel
+  commands:
+    - bmi-find -h
+    - bmi-babelize -h
+    - bmi-parameters -h
+    - bmi-files -h
+    - bmi-stage -h
+    - bmi-install -h
+    - bmi -h
+
+about:
+  summary: Generate BMI language bindings with babel.
+
+build:
+  number: 1
+  entry_points:
+    - bmi-find=bmibabel.cmd.bmi_find:main
+    - bmi-babelize=bmibabel.cmd.bmi_babelize:main
+    - bmi-parameters=bmibabel.cmd.bmi_parameters:main
+    - bmi-files=bmibabel.cmd.bmi_files:main
+    - bmi-stage=bmibabel.cmd.bmi_stage:main
+    - bmi-install=bmibabel.cmd.bmi_install:main
+    - bmi=bmibabel.cmd.bmi:main
+  preserve_egg_dir: True
