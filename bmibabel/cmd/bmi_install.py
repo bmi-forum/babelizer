@@ -11,7 +11,7 @@ import shutil
 
 import yaml
 
-from ..stage import install_data_files
+from ..files import install_data_files
 
 
 def main():

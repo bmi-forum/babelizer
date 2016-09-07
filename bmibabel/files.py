@@ -3,6 +3,7 @@ import os
 import string
 
 from .utils import cd
+from .stage import copy_data_files
 
 
 _METADATA_FILES = {
@@ -87,3 +88,14 @@ def fill_template_file(src, dest, **kwds):
 
         with open(dest, 'w') as fp:
             fp.write(sub_parameters(template, **kwds))
+
+
+def install_data_files(path, prefix):
+    installed = []
+
+    bmi = load_api(path)
+
+    datadir = mkdir_p(os.path.join(prefix, 'share', 'csdms', bmi['name']))
+    installed += copy_data_files(bmi['path'], datadir)
+
+    return installed

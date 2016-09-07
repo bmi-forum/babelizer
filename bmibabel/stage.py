@@ -48,14 +48,3 @@ def copy_data_files(datadir, destdir, **kwds):
                 copied.append(data_file)
 
     return copied
-
-
-def install_data_files(path, prefix):
-    installed = []
-
-    bmi = load_api(path)
-
-    datadir = mkdir_p(os.path.join(prefix, 'share', 'csdms', bmi['name']))
-    installed += copy_data_files(bmi['path'], datadir)
-
-    return installed
