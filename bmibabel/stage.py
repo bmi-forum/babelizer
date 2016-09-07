@@ -6,6 +6,7 @@ import string
 from .utils import mkdir_p, cd, is_text_file
 from .parameters import load
 from .files import find_bmi_data_files, fill_template_file
+from .api import load_api
 
 
 def stage(path, dest):
@@ -30,6 +31,7 @@ def copy_data_files(datadir, destdir, **kwds):
     with cd(datadir):
         data_files = find_bmi_data_files('.')
 
+    copied = []
     with cd(destdir) as cwd:
         for data_file in data_files:
             path_to_src = os.path.join(datadir, data_file)
@@ -43,4 +45,17 @@ def copy_data_files(datadir, destdir, **kwds):
                     fill_template_file(path_to_src, data_file, **kwds)
                 else:
                     shutil.copy2(path_to_src, data_file)
+                copied.append(data_file)
 
+    return copied
+
+
+def install_data_files(path, prefix):
+    installed = []
+
+    bmi = load_api(path)
+
+    datadir = mkdir_p(os.path.join(prefix, 'share', 'csdms', bmi['name']))
+    installed += copy_data_files(bmi['path'], datadir)
+
+    return installed
