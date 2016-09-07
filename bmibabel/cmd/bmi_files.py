@@ -16,21 +16,27 @@ from ..files import find_bmi_data_files
 
 def main():
     """Find data files."""
-    parser = argparse.ArgumentParser()
-    add_arguments(parser)
-
+    parser = create_parser()
     args = parser.parse_args()
-
-    find_files(args)
-
-
-def add_arguments(parser):
-    parser.add_argument('path', type=str, help='BMI metadata path')
+    args.func(args)
 
 
 def print_data_files(args):
     print(yaml.dump(find_bmi_data_files(args.path), default_flow_style=False),
           file=sys.stdout)
+
+
+def create_parser(addto=None):
+    if addto:
+        parser = addto.add_parser('files', help='BMI data files')
+    else:
+        parser = argparse.ArgumentParser(description='BMI data files')
+
+    parser.add_argument('path', type=str, help='BMI metadata path')
+
+    parser.set_defaults(func=print_data_files)
+
+    return parser
 
 
 if __name__ == '__main__':

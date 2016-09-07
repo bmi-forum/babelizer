@@ -22,25 +22,9 @@ from ..bocca import make_project, build_project, ProjectExistsError
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    add_arguments(parser)
-
+    parser = create_parser()
     args = parser.parse_args()
-
-    babelize(args)
-
-
-def add_arguments(parser):
-    parser.add_argument('path', type=str, nargs='+',
-                        help='Path to BMI metadta.')
-    parser.add_argument('--prefix', type=str, default='/usr/local/csdms',
-                        help='Prefix for installation')
-    parser.add_argument(
-        '--no-build', dest='build', action='store_false',
-        help='stage project but do not build')
-    parser.add_argument(
-        '--no-install', dest='install', action='store_false',
-        help='stage and build project but do not install')
+    args.func(args)
 
 
 def babelize(args):
@@ -67,6 +51,30 @@ def babelize(args):
                     print(bmi)
                 else:
                     glob_cp(os.path.join(bmi['path'], '*'), datadir)
+
+
+def create_parser(addto=None):
+    if addto:
+        parser = addto.add_parser(
+            'babelize', help='use babel to build language bindings')
+    else:
+        parser = argparse.ArgumentParser(
+            description='use babel to build language bindings')
+
+    parser.add_argument('path', type=str, nargs='+',
+                        help='Path to BMI metadta.')
+    parser.add_argument('--prefix', type=str, default='/usr/local/csdms',
+                        help='Prefix for installation')
+    parser.add_argument(
+        '--no-build', dest='build', action='store_false',
+        help='stage project but do not build')
+    parser.add_argument(
+        '--no-install', dest='install', action='store_false',
+        help='stage and build project but do not install')
+
+    parser.set_defaults(func=babelize)
+
+    return parser
 
 
 if __name__ == '__main__':

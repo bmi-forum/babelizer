@@ -22,17 +22,9 @@ from ..errors import MissingFileError, ParseError
 
 def main():
     """Look for BMI metadata in a folder."""
-    parser = argparse.ArgumentParser()
-    add_arguments(parser)
-
+    parser = create_parser()
     args = parser.parse_args()
-
-    find(args)
-
-
-def add_arguments(parser):
-    parser.add_argument('path', type=str, nargs='+',
-                        help='Search paths')
+    args.func(args)
 
 
 def find(args):
@@ -41,6 +33,19 @@ def find(args):
         found |= set(find_bmi_metadata(path))
 
     print(os.linesep.join(found), file=sys.stdout)
+
+
+def create_parser(addto=None):
+    if addto:
+        parser = addto.add_parser('find', help='find BMI metadata folders')
+    else:
+        parser = argparse.ArgumentParser(
+            description='find BMI metadata folders')
+
+    parser.add_argument('path', type=str, nargs='+', help='Search paths')
+    parser.set_defaults(func=find)
+
+    return parser
 
 
 if __name__ == '__main__':

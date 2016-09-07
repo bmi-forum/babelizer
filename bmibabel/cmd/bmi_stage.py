@@ -16,29 +16,23 @@ from ..stage import stage
 
 def main():
     """Stage a BMI model."""
-    parser = argparse.ArgumentParser()
-    add_arguments(parser)
-
+    parser = create_parser()
     args = parser.parse_args()
+    args.func(args)
 
-    stage_model(args)
 
+def create_parser(addto=None):
+    if addto:
+        parser = addto.add_parser('stage', help='stage a model')
+    else:
+        parser = argparse.ArgumentParser(description='stage a model')
 
-def add_arguments(parser):
     parser.add_argument('path', type=str, help='BMI metadata path')
     parser.add_argument('dest', type=str, help='stage folder')
 
+    parser.set_defaults(func=lambda args: stage(args.path, args.dest))
 
-def stage_model(args):
-    stage(args.path, args.dest)
-
-
-class StageSubCommand(object):
-    def add_arguments(self, parser):
-        parser.add_argument('path', type=str, help='BMI metadata path')
-
-    def run(self, args):
-        stage_model(args.path, args.dest)
+    return parser
 
 
 if __name__ == '__main__':
