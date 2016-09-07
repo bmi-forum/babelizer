@@ -5,6 +5,7 @@ from . import bmi_find as find
 from . import bmi_parameters as parameters
 from . import bmi_stage as stage
 from . import bmi_files as files
+from . import bmi_install as install
 
 
 def main():
@@ -21,6 +22,7 @@ def main():
     parameters.create_parser(addto=subparsers)
     stage.create_parser(addto=subparsers)
     files.create_parser(addto=subparsers)
+    install.create_parser(addto=subparsers)
 
     args = parser.parse_args()
 

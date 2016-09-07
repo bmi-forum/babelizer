@@ -48,6 +48,7 @@ setup(
             'bmi-parameters=bmibabel.cmd.bmi_parameters:main',
             'bmi-files=bmibabel.cmd.bmi_files:main',
             'bmi-stage=bmibabel.cmd.bmi_stage:main',
+            'bmi-install=bmibabel.cmd.bmi_install:main',
             'bmi=bmibabel.cmd.bmi:main',
         ],
     },
