@@ -2,8 +2,8 @@
 import os
 import string
 
-from .utils import cd
-from .stage import copy_data_files
+from .utils import cd, mkdir_p, is_text_file
+from .api import load_api
 
 
 _METADATA_FILES = {
@@ -88,6 +88,38 @@ def fill_template_file(src, dest, **kwds):
 
         with open(dest, 'w') as fp:
             fp.write(sub_parameters(template, **kwds))
+
+
+def copy_data_files(datadir, destdir, **kwds):
+    """Copy BMI data files into a folder, filling template files on the way.
+
+    Parameters
+    ----------
+    datadir : str
+        Path to the BMI component's data folder.
+    destdir : str
+        Path to the folder to copy the data into.
+    """
+    with cd(datadir):
+        data_files = find_bmi_data_files('.')
+
+    copied = []
+    with cd(destdir) as cwd:
+        for data_file in data_files:
+            path_to_src = os.path.join(datadir, data_file)
+
+            dir = os.path.dirname(data_file)
+            if dir:
+                mkdir_p(dir)
+
+            if os.path.isfile(path_to_src):
+                if is_text_file(path_to_src):
+                    fill_template_file(path_to_src, data_file, **kwds)
+                else:
+                    shutil.copy2(path_to_src, data_file)
+                copied.append(data_file)
+
+    return copied
 
 
 def install_data_files(path, prefix):
