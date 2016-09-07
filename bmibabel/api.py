@@ -109,6 +109,25 @@ def find_api_description_file(dir='.'):
                 return desc['implementation']
 
 
+_POSSIBLE_API_NAMES = [
+    os.path.join('.bmi', 'api.yaml'),
+    os.path.join('.bmi', 'api.yml'),
+    'api.yaml',
+    'api.yml',
+]
+
+
+def load_api(fname):
+    with cd(os.path.dirname(fname)):
+        (path_to_api, contents) = read_first_of(_POSSIBLE_API_NAMES)
+        api = yaml.load(contents)
+        api['path'] = os.path.dirname(path_to_api)
+
+    validate_api(api)
+
+    return api
+
+
 def load(dir='.'):
     """Load an api description from a file.
 
