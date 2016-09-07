@@ -19,7 +19,7 @@ from ..project import empty_bmi_project, add_bmi_component
 from .. import api
 from ..errors import MissingFileError, ParseError
 from ..bocca import make_project, build_project, ProjectExistsError
-from ..stage import copy_data_files
+from ..stage import install_data_files
 
 
 def main():
@@ -45,13 +45,7 @@ def babelize(args):
             proj = load_bmi_components(args.path, install_prefix=args.prefix,
                                        build_api=False)
             for bmi in proj['bmi']:
-                try:
-                    datadir = mkdir_p(os.path.join(args.prefix, 'share',
-                                                   'csdms', bmi['name']))
-                except KeyError:
-                    print(bmi)
-                else:
-                    copy_data_files(bmi['path'], datadir)
+                install_data_files(bmi['path'], args.prefix)
 
 
 def create_parser(addto=None):
