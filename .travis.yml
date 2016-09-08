@@ -5,7 +5,7 @@ env:
     secure: ia+3Wgjj5fv//9HZiH/Sr8x9yYu4eWYgnxDX7vGHf02bPlm7tqbFrdyxdr6bUoDqvI/0F+Iw4eAOYOUcJ2kE5jzUcuvJygyK1kXwdVtQq00kioFNm25IMCkVfj1XFD2O4dDlqJbbuW/+9JgBs4M/uWfRPL/oMB/DAl+fhCn4VeA=
 os:
 - linux
-- os
+- osx
 sudo: false
 install:
 - echo "Build on $TRAVIS_OS_NAME for Python $TRAVIS_PYTHON_VERSION"
