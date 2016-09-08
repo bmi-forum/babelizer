@@ -18,7 +18,7 @@ else
 fi
 
 echo "Uploading to $CHANNEL"
-echo $ANACONDA_UPLOAD --force --user csdms --channel $CHANNEL \
+$ANACONDA_UPLOAD --force --user csdms --channel $CHANNEL \
   $PREFIX/conda-bld/**/$PACKAGE_NAME*bz2
 
 echo "Done."
