@@ -702,7 +702,7 @@ def build_project(dir='.', prefix=None, install=False):
         os.environ['LDFLAGS'] = '-headerpad_max_install_names'
 
     with cd(dir) as cwd:
-        system(['./configure', '--with-languages=python',
+        system(['./configure', '--with-languages=python c',
                 '--prefix={prefix}'.format(prefix=prefix)])
         system(['make', 'all'])
 
