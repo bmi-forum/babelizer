@@ -14,8 +14,8 @@ install:
 - bash .ci/travis/install_python.sh $HOME/miniconda
 - export PATH="$HOME/miniconda/bin:$PATH"
 - conda info -a
-- conda build -q conda-recipe -c csdms
-- conda install -q bmi-babel --use-local -c csdms
+- conda build -q conda-recipe -c csdms -c csdms/channel/dev
+- conda install -q bmi-babel --use-local -c csdms -c csdms/channel/dev
 - pip install coveralls
 script:
 - nosetests --with-doctest --with-coverage --cover-package=bmibabel bmibabel
