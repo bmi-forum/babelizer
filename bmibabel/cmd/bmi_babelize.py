@@ -11,13 +11,12 @@ import shutil
 
 import yaml
 
+from scripting.contexts import homebrew_hidden, cd, system, mkdir_p, glob_cp
+
 from ..fetch import load_bmi_components
 
-from ..utils import cd, system, mkdir_p, glob_cp
-from ..git import git_repo_name, git_clone_or_update, git_repo_sha
-from ..project import empty_bmi_project, add_bmi_component
-from .. import api
-from ..errors import MissingFileError, ParseError
+# from ..utils import cd, system, mkdir_p, glob_cp
+
 from ..bocca import make_project, build_project, ProjectExistsError
 from ..files import install_data_files
 
@@ -29,23 +28,25 @@ def main():
 
 
 def babelize(args):
-    proj = load_bmi_components(args.path, install_prefix=args.prefix,
-                               build_api=False)
+    with homebrew_hidden():
+        proj = load_bmi_components(args.path, install_prefix=args.prefix,
+                                   build_api=False)
 
-    try:
-        build_dir = make_project(proj, clobber=True)
-    except ProjectExistsError as error:
-        print('The specified project (%s) already exists. Exiting.' % error)
-        return None
+        try:
+            build_dir = make_project(proj, clobber=True)
+        except ProjectExistsError as error:
+            print('The specified project (%s) already exists. Exiting.' % error)
+            return None
 
-    if args.build:
-        build_project(build_dir, prefix=args.prefix, install=args.install)
+        if args.build:
+            build_project(build_dir, prefix=args.prefix, install=args.install)
 
-        if args.install:
-            proj = load_bmi_components(args.path, install_prefix=args.prefix,
-                                       build_api=False)
-            for bmi in proj['bmi']:
-                install_data_files(bmi['path'], args.prefix)
+            if args.install:
+                proj = load_bmi_components(args.path, install_prefix=args.prefix,
+                                           build_api=False)
+                for bmi in proj['bmi']:
+                    install_data_files(bmi['path'], args.prefix,
+                                       include_metadata=True)
 
 
 def create_parser(addto=None):
