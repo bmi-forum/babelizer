@@ -22,6 +22,7 @@ requirements:
     - cca-bocca
     - pkgconfig-command [osx]
     - pexpect
+    - scripting
 
 test:
   imports:

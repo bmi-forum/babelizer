@@ -8,7 +8,7 @@ import yaml
 from .utils import cd, check_output
 from .errors import (ParseError, MissingKeyError, UnknownKeyError,
                      MissingFileError)
-from . import build
+# from . import build
 from .utils import read_first_of
 
 
@@ -281,14 +281,3 @@ def load_bmi_paths(fname, dir='.'):
                 paths.append(bmi_path)
 
     return paths
-
-
-def execute_api_build(dir='.', prefix='/usr/local'):
-    """Build an API from a file.
-
-    Parameters
-    ----------
-    dir : str, optional
-        Path to folder that contains description file.
-    """
-    build.execute_build(build.load_script(dir=dir), prefix=prefix)
