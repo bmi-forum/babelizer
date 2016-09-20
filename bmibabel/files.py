@@ -140,7 +140,7 @@ def install_data_files(path, prefix, include_metadata=False):
     installed += copy_data_files(bmi['path'], datadir)
 
     if include_metadata:
-        for path_to_src in find_metadata_files(bmi['path'])
+        for path_to_src in find_metadata_files(bmi['path']):
             shutil.copy2(path_to_src, datadir)
 
     return installed
