@@ -9,7 +9,7 @@ import subprocess
 
 import yaml
 
-from scripting.contexts import setenv
+from scripting.contexts import setenv, homebrew_hidden
 
 from .fetch import load_bmi_components
 from .files import install_data_files
@@ -182,21 +182,23 @@ def babelize(path_to_bmi, prefix=None, build=True, install=True):
     proj = load_bmi_components(path_to_bmi, install_prefix=prefix,
                                build_api=False)
 
-    with setenv(setup_build_env(prefix)):
-        try:
-            build_dir = make_project(proj, clobber=True)
-        except ProjectExistsError as error:
-            print('The specified project (%s) already exists. Exiting.' % error)
-            return None
+    with homebrew_hidden():
+        with setenv(setup_build_env(prefix)):
+            try:
+                build_dir = make_project(proj, clobber=True)
+            except ProjectExistsError as error:
+                print('The specified project (%s) already exists. Exiting.' % error)
+                return None
 
-        if build:
-            build_project(build_dir, prefix=prefix, install=install)
+            if build:
+                build_project(build_dir, prefix=prefix, install=install)
 
-        if install:
-            proj = load_bmi_components(path_to_bmi, install_prefix=prefix,
-                                       build_api=False)
-            for bmi in proj['bmi']:
-                install_data_files(bmi['path'], prefix)
+            if install:
+                proj = load_bmi_components(path_to_bmi, install_prefix=prefix,
+                                           build_api=False)
+                for bmi in proj['bmi']:
+                    install_data_files(bmi['path'], prefix,
+                                       include_metadata=True)
 
 
 def execute_api_build(dir='.', prefix='/usr/local'):
