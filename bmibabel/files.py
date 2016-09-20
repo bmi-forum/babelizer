@@ -2,7 +2,9 @@
 import os
 import string
 
-from .utils import cd, mkdir_p, is_text_file
+from scripting.contexts import cd
+
+from .utils import mkdir_p, is_text_file
 from .api import load_api
 
 
@@ -38,6 +40,13 @@ def sub_parameters(string, **kwds):
 
 def is_metadata_file(fname):
     return os.path.basename(fname) in _METADATA_FILES
+
+
+def find_bmi_metadata_files(datadir):
+    with cd(datadir, create=False):
+        found = [fname for fname in _METADATA_FILES if os.path.isfile(fname)]
+
+    return [os.path.join(datadir, fname) for fname in found]
 
 
 def find_bmi_data_files(datadir):
@@ -100,7 +109,7 @@ def copy_data_files(datadir, destdir, **kwds):
     destdir : str
         Path to the folder to copy the data into.
     """
-    with cd(datadir):
+    with cd(datadir, create=False):
         data_files = find_bmi_data_files('.')
 
     copied = []
@@ -122,12 +131,16 @@ def copy_data_files(datadir, destdir, **kwds):
     return copied
 
 
-def install_data_files(path, prefix):
+def install_data_files(path, prefix, include_metadata=False):
     installed = []
 
     bmi = load_api(path)
 
     datadir = mkdir_p(os.path.join(prefix, 'share', 'csdms', bmi['name']))
     installed += copy_data_files(bmi['path'], datadir)
+
+    if include_metadata:
+        for path_to_src in find_metadata_files(bmi['path'])
+            shutil.copy2(path_to_src, datadir)
 
     return installed
