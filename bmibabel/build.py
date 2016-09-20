@@ -144,7 +144,8 @@ def setup_build_env(prefix):
 
     build_env = {
         'PATH': os.pathsep.join(
-            [os.path.join(sys.prefix, 'bin'), '/usr/bin', '/bin']),
+            [os.path.join(sys.prefix, 'bin'), '/usr/bin', '/bin',
+             '/usr/sbin', '/etc', '/usr/lib']),
         'CC': babel_config('CC'),
         'CXX': babel_config('CXX'),
         'USER': 'nobody',
