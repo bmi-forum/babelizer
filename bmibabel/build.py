@@ -183,8 +183,8 @@ def babelize(path_to_bmi, prefix=None, build=True, install=True):
 
     with homebrew_hidden():
         with setenv(setup_build_env(prefix)):
-            for k, v in os.environ.items():
-                print('{key}={val}'.format(key=k, val=v))
+            # for k, v in os.environ.items():
+            #     print('{key}={val}'.format(key=k, val=v))
 
             proj = load_bmi_components(path_to_bmi, install_prefix=prefix,
                                        build_api=False)
