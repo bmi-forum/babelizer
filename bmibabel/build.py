@@ -144,7 +144,8 @@ def setup_build_env(prefix):
 
     build_env = {
         'PATH': os.pathsep.join(
-            [os.path.join(sys.prefix, 'bin'), '/usr/bin', '/bin',
+            [os.path.join(sys.prefix, 'bin'), # '/usr/local/gfortran/bin',
+             '/usr/bin', '/bin',
              '/usr/sbin', '/etc', '/usr/lib']),
         'CC': babel_config('CC'),
         'CXX': babel_config('CXX'),
@@ -180,11 +181,14 @@ def babelize(path_to_bmi, prefix=None, build=True, install=True):
     prefix = prefix or os.path.join(os.sep, 'usr', 'local')
     build = build or install
 
-    proj = load_bmi_components(path_to_bmi, install_prefix=prefix,
-                               build_api=False)
-
     with homebrew_hidden():
         with setenv(setup_build_env(prefix)):
+            for k, v in os.environ.items():
+                print('{key}={val}'.format(key=k, val=v))
+
+            proj = load_bmi_components(path_to_bmi, install_prefix=prefix,
+                                       build_api=False)
+
             try:
                 build_dir = make_project(proj, clobber=True)
             except ProjectExistsError as error:
