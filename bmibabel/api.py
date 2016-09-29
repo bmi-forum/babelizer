@@ -17,7 +17,8 @@ _API_FILES = [os.path.join('.bmi', 'api.yaml'),
 
 _REQUIRED_KEYS = set(['language', ])
 _OPTIONAL_KEYS = set(['name', 'type', 'register', 'class', 'package',
-                      'libs', 'cflags', 'includes', 'build', 'path'])
+                      'libs', 'cflags', 'includes', 'build', 'path',
+                      'initialize_args'])
 _VALID_KEYS = _REQUIRED_KEYS | _OPTIONAL_KEYS
 
 
