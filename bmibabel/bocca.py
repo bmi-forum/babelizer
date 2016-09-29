@@ -9,8 +9,10 @@ import shutil
 import glob
 from string import Template
 
-from .utils import (cd, mktemp, which, system, check_output, mkdir_p, glob_cp,
-                    glob_sub)
+from scripting.unix import system, which, glob_cp, check_output
+from scripting.contexts import cd
+
+from .utils import mktemp, mkdir_p, glob_sub
 from .errors import ProjectExistsError
 
 
