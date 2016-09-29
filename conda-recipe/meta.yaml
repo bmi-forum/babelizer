@@ -35,6 +35,9 @@ test:
     - bmi-stage -h
     - bmi-install -h
     - bmi -h
+  requires:
+    - cmake
+    - pymt
 
 about:
   summary: Generate BMI language bindings with babel.
