@@ -10,6 +10,7 @@ import subprocess
 import yaml
 
 from scripting.contexts import setenv, homebrew_hidden
+from scripting.prompting import error, success
 
 from .fetch import load_bmi_components
 from .files import install_data_files
@@ -189,11 +190,12 @@ def babelize(path_to_bmi, prefix=None, build=True, install=True):
             try:
                 build_dir = make_project(proj, clobber=True)
             except ProjectExistsError as error:
-                print('The specified project (%s) already exists. Exiting.' % error)
+                error('Project exists: {dir}'.format(dir=path_to_bmi))
                 return None
 
             if build:
                 build_project(build_dir, prefix=prefix, install=install)
+                success('created bocca project: {dir}'.format(dir=build_dir))
 
             if install:
                 proj = load_bmi_components(path_to_bmi, install_prefix=prefix,
@@ -201,6 +203,10 @@ def babelize(path_to_bmi, prefix=None, build=True, install=True):
                 for bmi in proj['bmi']:
                     install_data_files(bmi['path'], prefix,
                                        include_metadata=True)
+                success('installed bocca project: {dir}'.format(dir=prefix))
+
+    for dir in [os.path.abspath(d) for d in path_to_bmi]:
+        success('babelized BMI project: {dir}'.format(dir=dir))
 
 
 def execute_api_build(dir='.', prefix='/usr/local'):
