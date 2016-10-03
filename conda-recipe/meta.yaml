@@ -16,6 +16,7 @@ requirements:
     - nose
     - cca-bocca
     - pexpect
+    - conda-build
 
   run:
     - python
@@ -26,6 +27,7 @@ requirements:
     - pkgconfig-command [osx]
     - pexpect
     - scripting
+    - conda-build
 
 test:
   imports:
