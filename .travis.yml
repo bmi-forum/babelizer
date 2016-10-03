@@ -2,23 +2,21 @@ env:
   matrix:
   - TRAVIS_PYTHON_VERSION="2.7"
   global:
-    secure: ia+3Wgjj5fv//9HZiH/Sr8x9yYu4eWYgnxDX7vGHf02bPlm7tqbFrdyxdr6bUoDqvI/0F+Iw4eAOYOUcJ2kE5jzUcuvJygyK1kXwdVtQq00kioFNm25IMCkVfj1XFD2O4dDlqJbbuW/+9JgBs4M/uWfRPL/oMB/DAl+fhCn4VeA=
+  - THIS_PACKAGE=bmi-babel
+  - secure: ia+3Wgjj5fv//9HZiH/Sr8x9yYu4eWYgnxDX7vGHf02bPlm7tqbFrdyxdr6bUoDqvI/0F+Iw4eAOYOUcJ2kE5jzUcuvJygyK1kXwdVtQq00kioFNm25IMCkVfj1XFD2O4dDlqJbbuW/+9JgBs4M/uWfRPL/oMB/DAl+fhCn4VeA=
 os:
 - linux
 - osx
 sudo: false
 install:
-- echo "Build on $TRAVIS_OS_NAME for Python $TRAVIS_PYTHON_VERSION"
-- if [[ "$TRAVIS_TAG" == v* ]]; then export BUILD_STR=""; else export BUILD_STR="dev";
-  fi
 - bash .ci/travis/install_python.sh $HOME/miniconda
 - export PATH="$HOME/miniconda/bin:$PATH"
 - conda info -a
-- conda build -q conda-recipe -c csdms -c csdms/channel/dev
-- conda install -q bmi-babel --use-local -c csdms -c csdms/channel/dev
+- conda build -q conda-recipe -c conda-forge -c csdms/channel/dev -c csdms
+- conda install -q $THIS_PACKAGE --use-local -c conda-forge -c csdms/channel/dev -c csdms
 - pip install coveralls
 script:
 - nosetests --with-doctest --with-coverage --cover-package=bmibabel bmibabel
 after_success:
 - coveralls --verbose
-- bash .ci/travis/deploy_to_anaconda.sh bmi-babel
+- bash .ci/travis/deploy_to_anaconda.sh $THIS_PACKAGE
