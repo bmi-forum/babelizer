@@ -1,6 +1,9 @@
+{% set name = "bmi-babel" %}
+{% set version = "1.4.0" %}
+
 package:
-  name: bmi-babel
-  version: {{"0.1.0" + environ.get('BUILD_STR', '')}}
+  name: {{ name }}
+  version: {{ version }}
 
 source:
   path: ..
@@ -44,6 +47,7 @@ about:
 
 build:
   number: 1
+  string: {{ environ.get('GIT_BUILD_STR', '') }}
   entry_points:
     - bmi-find=bmibabel.cmd.bmi_find:main
     - bmi-babelize=bmibabel.cmd.bmi_babelize:main
