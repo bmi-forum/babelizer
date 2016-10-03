@@ -7,6 +7,7 @@ prefix=$(python -c 'import sys; print sys.prefix')
 mkdir _build && pushd _build
   cmake .. -DCMAKE_INSTALL_PREFIX=$prefix
   make -j$CPU_COUNT all install
+  export PKG_CONFIG_PATH=$prefix/lib/pkgconfig
 popd
 
 bmi babelize . --prefix=$prefix
