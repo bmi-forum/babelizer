@@ -9,6 +9,8 @@ import shutil
 import glob
 from string import Template
 
+from conda_build.os_utils.macho import get_dylibs
+
 from scripting.unix import system, which, glob_cp, check_output
 from scripting.contexts import cd
 
@@ -693,6 +695,18 @@ def make_project(proj, clobber=False):
     return os.path.abspath(proj['name'])
 
 
+def install_name_change(path, old, new):
+    system(['install_name_tool', '-change', old, new, path])
+
+
+def fix_dylibs(path):
+    dylibs = [lib for lib in get_dylibs(path)
+              if not os.path.isabs(lib) and not lib.startswith('@')]
+
+    for dylib in dylibs:
+        install_name_change(path, dylib, os.path.join('@rpath', dylib))
+
+
 def build_project(dir='.', prefix=None, install=False):
     prefix = os.path.abspath(prefix or os.path.join(dir, 'install'))
 
@@ -720,6 +734,8 @@ def build_project(dir='.', prefix=None, install=False):
                    os.path.abspath(prefix))
             glob_sub('./install/share/cca/*.cca', sub)
             glob_sub('./install/lib/libcsdms*la', sub)
+            for lib in glob.glob('./install/lib/libcsdms*dylib'):
+                fix_dylibs(lib)
 
             glob_cp('./install/share/cca/*.cca', sharedir)
             glob_cp('./install/lib/libcsdms*', libdir)
