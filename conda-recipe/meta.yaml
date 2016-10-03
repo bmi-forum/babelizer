@@ -48,7 +48,6 @@ about:
   summary: Generate BMI language bindings with babel.
 
 build:
-  number: 1
   string: {{ environ.get('GIT_BUILD_STR', '') }}
   entry_points:
     - bmi-find=bmibabel.cmd.bmi_find:main
