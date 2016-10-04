@@ -1,5 +1,5 @@
 {% set name = "bmi-babel" %}
-{% set version = "1.4.0" %}
+{% set version = "0.1.0" %}
 {% set build_string = environ.get('GIT_BUILD_STR', '') %}
 
 package:
