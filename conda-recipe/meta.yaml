@@ -1,5 +1,6 @@
 {% set name = "bmi-babel" %}
 {% set version = "1.4.0" %}
+{% set build_string = environ.get('GIT_BUILD_STR', '') %}
 
 package:
   name: {{ name }}
@@ -48,7 +49,7 @@ about:
   summary: Generate BMI language bindings with babel.
 
 build:
-  string: {{ environ.get('GIT_BUILD_STR', '') }}
+  string: {{ build_string }}
   entry_points:
     - bmi-find=bmibabel.cmd.bmi_find:main
     - bmi-babelize=bmibabel.cmd.bmi_babelize:main
