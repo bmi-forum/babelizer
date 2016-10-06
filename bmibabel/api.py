@@ -119,7 +119,12 @@ _POSSIBLE_API_NAMES = [
 
 
 def load_api(fname):
-    with cd(os.path.dirname(fname)):
+    if os.path.isfile(fname):
+        path_to_bmi = os.path.dirname(fname)
+    else:
+        path_to_bmi = fname
+
+    with cd(path_to_bmi):
         (path_to_api, contents) = read_first_of(_POSSIBLE_API_NAMES)
         api = yaml.load(contents)
         api['path'] = os.path.dirname(path_to_api)
