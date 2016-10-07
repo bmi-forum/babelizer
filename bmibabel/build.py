@@ -140,12 +140,36 @@ def babel_config(var):
     return subprocess.check_output(['babel-config', '--query-var={var}'.format(var=var)]).strip()
 
 
+def find_java(env=None, hint=None):
+    env = env or os.environ
+    hint = hint or []
+    if isinstance(hint, str):
+        hint = [hint]
+
+    search_paths = []
+    if 'JAVA_HOME' in env:
+        search_paths += [os.path.join(env['JAVA_HOME'], 'bin')]
+    if hint:
+        search_paths += [os.path.join(p, 'bin') for p in hint]
+    if 'PATH' in env:
+        search_paths += env['PATH'].split(os.pathsep)
+
+    java_home = None
+    for path in search_paths:
+        path_to_java = os.path.join(path, 'java')
+        if os.path.isfile(path_to_java):
+            java_home = os.path.dirname(path)
+            break
+
+    return java_home
+
+
 def setup_build_env(prefix):
-    java_home = babel_config('JAVAPREFIX')
+    java_home = find_java(hint=babel_config('JAVAPREFIX'))
 
     build_env = {
         'PATH': os.pathsep.join(
-            [os.path.join(sys.prefix, 'bin'), # '/usr/local/gfortran/bin',
+            [os.path.join(sys.prefix, 'bin'),
              '/usr/bin', '/bin',
              '/usr/sbin', '/etc', '/usr/lib']),
         'CC': babel_config('CC'),
