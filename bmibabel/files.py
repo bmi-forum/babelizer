@@ -97,10 +97,15 @@ def fill_template_file(src, dest, **kwds):
             dest = base
 
         with open(dest, 'w') as fp:
-            fp.write(sub_parameters(template, **kwds))
+            try:
+                fp.write(sub_parameters(template, **kwds))
+            except ValueError as err:
+                raise ValueError(src + ':' + str(err))
+
+    return dest
 
 
-def copy_data_files(datadir, destdir, **kwds):
+def stage_data_files(datadir, destdir, **kwds):
     """Copy BMI data files into a folder, filling template files on the way.
 
     Parameters
@@ -110,6 +115,34 @@ def copy_data_files(datadir, destdir, **kwds):
     destdir : str
         Path to the folder to copy the data into.
     """
+    data_files = copy_data_files(datadir, destdir)
+
+    staged = []
+    with cd(destdir):
+        for data_file in data_files:
+            dest = data_file
+            if is_text_file(data_file):
+                dest = fill_template_file(data_file, dest, **kwds)
+                if not os.path.samefile(dest, data_file):
+                    os.remove(data_file)
+            staged.append(dest)
+
+    return staged
+
+
+def copy_data_files(datadir, destdir):
+    """Copy BMI data files into a folder.
+
+    Parameters
+    ----------
+    datadir : str
+        Path to the BMI component's data folder.
+    destdir : str
+        Path to the folder to copy the data into.
+    """
+    datadir = os.path.abspath(datadir)
+    destdir = os.path.abspath(destdir)
+
     with cd(datadir, create=False):
         data_files = find_bmi_data_files('.')
 
@@ -123,11 +156,8 @@ def copy_data_files(datadir, destdir, **kwds):
                 mkdir_p(dir)
 
             if os.path.isfile(path_to_src):
-                if is_text_file(path_to_src):
-                    fill_template_file(path_to_src, data_file, **kwds)
-                else:
-                    shutil.copy2(path_to_src, data_file)
-                copied.append(data_file)
+                shutil.copy2(path_to_src, data_file)
+                copied.append(os.path.abspath(data_file))
 
     return copied
 
