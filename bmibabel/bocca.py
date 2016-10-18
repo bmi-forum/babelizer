@@ -716,7 +716,7 @@ def make_abspath_relative_to_rpath(path, prefix):
 def prefix_rpath_to_relpaths(path):
     for dylib in get_dylibs(path):
         if not os.path.isabs(dylib) and not dylib.startswith('@'):
-            install_name_change(path, dylib, os.path.join('@rpath', dylib))
+            install_name_change(path, dylib, os.path.join('@rpath/lib', dylib))
 
 
 def build_project(dir='.', prefix=None, install=False):
