@@ -748,7 +748,7 @@ def build_project(dir='.', prefix=None, install=False):
             glob_sub('./install/share/cca/*.cca', sub)
             glob_sub('./install/lib/libcsdms*la', sub)
             for lib in glob.glob('./install/lib/libcsdms*dylib'):
-                fix_dylibs(lib, os.path.join(cwd, 'install'))
+                fix_dylibs(lib, os.path.join(cwd, 'install', 'lib'))
 
             glob_cp('./install/share/cca/*.cca', sharedir)
             glob_cp('./install/lib/libcsdms*', libdir)
