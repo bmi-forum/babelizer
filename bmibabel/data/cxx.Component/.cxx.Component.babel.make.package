@@ -1,0 +1,7 @@
+.cxx.Component.BABEL_MAKEFILE_NAME = .cxx.Component.babel.make
+.cxx.Component.STUB_SRC_DIRS =                                                \
+  /Users/huttone/git/childmodel/child/Child/Code/ChildInterface/csdms/components/cxx.Component/glue/
+.cxx.Component.IMPL_SRC_DIRS =                                                \
+  /Users/huttone/git/childmodel/child/Child/Code/ChildInterface/csdms/components/cxx.Component/
+.cxx.Component.IOR_SRC_DIRS =                                                 \
+  /Users/huttone/git/childmodel/child/Child/Code/ChildInterface/csdms/components/cxx.Component/glue/

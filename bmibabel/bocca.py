@@ -22,6 +22,7 @@ _THIS_DIR = os.path.dirname(__file__)
 _PATH_TO_IMPL = {
     'c': os.path.join(_THIS_DIR, 'data', 'c.Component'),
     'cxx': os.path.join(_THIS_DIR, 'data', 'csdms.examples.cxx.Heat'),
+    'cxx': os.path.join(_THIS_DIR, 'data', 'cxx.Component'),
     'f90': os.path.join(_THIS_DIR, 'data', 'csdms.examples.f90.Heat'),
     'python': os.path.join(_THIS_DIR, 'data', 'py.Component'),
 }

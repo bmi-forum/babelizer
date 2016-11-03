@@ -1,0 +1,21 @@
+# .cxx.Component.IMPLHDRS dependencies.
+cxx_Component_Impl.hxx:                                                       \
+  /Users/huttone/git/childmodel/child/Child/Code/ChildInterface/csdms/components/sidl/cxx.Component.sidl
+cxx_Component_Impl.hxx: sidl_cxx.hxx
+cxx_Component_Impl.hxx: cxx_Component_IOR.h
+cxx_Component_Impl.hxx: csdms_core_Bmi.hxx
+cxx_Component_Impl.hxx: cxx_Component.hxx
+cxx_Component_Impl.hxx: sidl_BaseClass.hxx
+cxx_Component_Impl.hxx: sidl_BaseInterface.hxx
+cxx_Component_Impl.hxx: sidl_ClassInfo.hxx
+
+
+# .cxx.Component.IMPLSRCS dependencies.
+cxx_Component_Impl.cxx:                                                       \
+  /Users/huttone/git/childmodel/child/Child/Code/ChildInterface/csdms/components/sidl/cxx.Component.sidl
+cxx_Component_Impl.cxx: cxx_Component_Impl.hxx
+cxx_Component_Impl.cxx: sidl_BaseInterface.hxx
+cxx_Component_Impl.cxx: sidl_ClassInfo.hxx
+cxx_Component_Impl.cxx: sidl_NotImplementedException.hxx
+
+
