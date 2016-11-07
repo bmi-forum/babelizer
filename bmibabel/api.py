@@ -4,6 +4,7 @@
 import os
 
 import yaml
+import pkgconfig
 
 from .utils import cd, check_output
 from .errors import (ParseError, MissingKeyError, UnknownKeyError,
@@ -167,14 +168,14 @@ def load(dir='.'):
 
     api.pop('build', None)
 
-    if api['language'] == 'c':
+    if api['language'] in ('c', 'cxx'):
         cflags = api['cflags']
         if isinstance(cflags, dict) and 'pkgconfig' in cflags:
-            api['cflags'] = pkg_config(cflags['pkgconfig'], '--cflags')
+            api['cflags'] = pkgconfig.cflags(cflags['pkgconfig'])
 
         libs = api['libs']
         if isinstance(libs, dict) and 'pkgconfig' in libs:
-            api['libs'] = pkg_config(cflags['pkgconfig'], '--libs')
+            api['libs'] = pkgconfig.libs(libs['pkgconfig'])
     elif api['language'] == 'python':
         pass
 
