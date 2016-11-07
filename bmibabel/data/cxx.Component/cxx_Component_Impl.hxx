@@ -38,7 +38,6 @@
 // DO-NOT-DELETE splicer.begin(cxx.Component._hincludes)
 // Insert-Code-Here {cxx.Component._hincludes} (includes or arbitrary code)
 ${bmi_includes}
-${bmi_defines}
 
 #define CALL_BMI_VOID(func,...) { \
   try { \
@@ -79,7 +78,7 @@ namespace cxx {
 
     // DO-NOT-DELETE splicer.begin(cxx.Component._implementation)
     // Insert-Code-Here {cxx.Component._implementation} (additional details)
-    ${bmi_type} state;
+    bmi::Model state;
     // DO-NOT-DELETE splicer.end(cxx.Component._implementation)
 
   public:

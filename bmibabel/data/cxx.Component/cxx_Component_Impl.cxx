@@ -337,6 +337,7 @@ cxx::Component_impl::get_input_var_names_impl (
 
   CALL_BMI_VOID(GetInputVarNames, item_names);
 
+  names = sidl::array< ::std::string>::create1d(number_of_names);
   for (int i = 0; i < number_of_names; i ++) {
     names.set(i, ::std::string(item_names[i]));
   }
@@ -369,6 +370,7 @@ cxx::Component_impl::get_output_var_names_impl (
 
   CALL_BMI_VOID(GetOutputVarNames, item_names);
 
+  names = sidl::array< ::std::string>::create1d(number_of_names);
   for (int i = 0; i < number_of_names; i ++) {
     names.set(i, ::std::string(item_names[i]));
   }
@@ -520,7 +522,7 @@ cxx::Component_impl::get_grid_spacing_impl (
   /* in array<double> */::sidl::array<double>& spacing ) 
 {
   // DO-NOT-DELETE splicer.begin(cxx.Component.get_grid_spacing)
-  CALL_BMI_VOID(GetGridSpacing, grid, shapcing.first());
+  CALL_BMI_VOID(GetGridSpacing, grid, spacing.first());
   return 0;
   // DO-NOT-DELETE splicer.end(cxx.Component.get_grid_spacing)
 }
@@ -618,7 +620,9 @@ cxx::Component_impl::get_value_impl (
   /* in array<> */::sidl::basearray& dest ) 
 {
   // DO-NOT-DELETE splicer.begin(cxx.Component.get_value)
-  CALL_BMI(GetValue, name.c_str(), dest.first());
+  struct sidl__array * array = dest._get_baseior();
+  CALL_BMI_VOID(GetValue, name.c_str(),
+      sidl_char__array_first((struct sidl_char__array*)(array)));
   return 0;
   // DO-NOT-DELETE splicer.end(cxx.Component.get_value)
 }
@@ -635,16 +639,21 @@ cxx::Component_impl::get_value_ptr_impl (
   void * ptr;
   int size;
   int grid;
+
   CALL_BMI(grid, GetVarGrid, name.c_str());
   CALL_BMI(size, GetGridSize, grid);
   CALL_BMI(ptr, GetValuePtr, name.c_str());
-  {
+
+  if (ptr) {
     const int n_dims = 1;
     const int lower[1] = {0};
     const int upper[1] = {size - 1};
     const int stride[1] = {1};
-    values.borrow(ptr, n_dims, lower, upper, stride);
+    sidl::array<char> cvals;
+    cvals.borrow((char*)ptr, n_dims, lower, upper, stride);
+    values = cvals;
   }
+
   return 0;
   // DO-NOT-DELETE splicer.end(cxx.Component.get_value_ptr)
 }
@@ -681,7 +690,9 @@ cxx::Component_impl::set_value_impl (
   /* in array<> */::sidl::basearray& values ) 
 {
   // DO-NOT-DELETE splicer.begin(cxx.Component.set_value)
-  CALL_BMI(SetValue, name.c_str(), values.first());
+  struct sidl__array * array = values._get_baseior();
+  CALL_BMI_VOID(SetValue, name.c_str(),
+      sidl_char__array_first((struct sidl_char__array*)(array)));
   return 0;
   // DO-NOT-DELETE splicer.end(cxx.Component.set_value)
 }
