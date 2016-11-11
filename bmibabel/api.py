@@ -2,9 +2,9 @@
 """Work with api.yaml files from a BMI description."""
 
 import os
+import sys
 
 import yaml
-import pkgconfig
 
 from .utils import cd, check_output
 from .errors import (ParseError, MissingKeyError, UnknownKeyError,
@@ -95,6 +95,10 @@ def pkg_config(package, opt):
     assert(opt in ['--cflags', '--libs'])
 
     env = copy.copy(os.environ)
+
+    pkg_config_path = os.path.join(sys.prefix, 'lib', 'pkgconfig')
+    prepend_env_path('PKG_CONFIG_PATH', pkg_config_path, env=env)
+
     if 'CSDMS_PREFIX' in env:
         pkg_config_path = os.path.join(env['CSDMS_PREFIX'], 'lib', 'pkgconfig')
         prepend_env_path('PKG_CONFIG_PATH', pkg_config_path, env=env)
@@ -171,11 +175,14 @@ def load(dir='.'):
     if api['language'] in ('c', 'cxx'):
         cflags = api['cflags']
         if isinstance(cflags, dict) and 'pkgconfig' in cflags:
-            api['cflags'] = pkgconfig.cflags(cflags['pkgconfig'])
+            api['cflags'] = pkg_config(cflags['pkgconfig'], opt='--cflags')
+            # api['cflags'] = pkgconfig.cflags(cflags['pkgconfig'])
 
         libs = api['libs']
         if isinstance(libs, dict) and 'pkgconfig' in libs:
-            api['libs'] = pkgconfig.libs(libs['pkgconfig'])
+            api['libs'] = pkg_config(libs['pkgconfig'], opt='--libs')
+            # api['libs'] = pkgconfig.libs(libs['pkgconfig'])
+
     elif api['language'] == 'python':
         pass
 
