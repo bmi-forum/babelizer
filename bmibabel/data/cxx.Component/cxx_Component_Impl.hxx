@@ -375,6 +375,26 @@ namespace cxx {
     ;
 
     /**
+     * Method:  get_grid_vertex_count[]
+     */
+    int32_t
+    get_grid_vertex_count_impl (
+      /* in */int32_t grid,
+      /* out */int32_t& n_vertices
+    )
+    ;
+
+    /**
+     * Method:  get_grid_face_count[]
+     */
+    int32_t
+    get_grid_face_count_impl (
+      /* in */int32_t grid,
+      /* out */int32_t& n_faces
+    )
+    ;
+
+    /**
      * user defined non-static method.
      */
     int32_t

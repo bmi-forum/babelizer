@@ -584,6 +584,34 @@ cxx::Component_impl::get_grid_z_impl (
 }
 
 /**
+ * Method:  get_grid_vertex_count[]
+ */
+int32_t
+cxx::Component_impl::get_grid_vertex_count_impl (
+  /* in */int32_t grid,
+  /* out */int32_t& n_vertices ) 
+{
+  // DO-NOT-DELETE splicer.begin(cxx.Component.get_grid_vertex_count)
+  CALL_BMI(n_vertices, GetGridVertexCount, grid);
+  return 0;
+  // DO-NOT-DELETE splicer.end(cxx.Component.get_grid_vertex_count)
+}
+
+/**
+ * Method:  get_grid_face_count[]
+ */
+int32_t
+cxx::Component_impl::get_grid_face_count_impl (
+  /* in */int32_t grid,
+  /* out */int32_t& n_faces ) 
+{
+  // DO-NOT-DELETE splicer.begin(cxx.Component.get_grid_face_count)
+  CALL_BMI(n_faces, GetGridFaceCount, grid);
+  return 0;
+  // DO-NOT-DELETE splicer.end(cxx.Component.get_grid_face_count)
+}
+
+/**
  * Method:  get_grid_connectivity[]
  */
 int32_t
