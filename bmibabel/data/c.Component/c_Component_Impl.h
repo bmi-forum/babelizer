@@ -298,6 +298,22 @@ impl_c_Component_get_grid_z(
 
 extern
 int32_t
+impl_c_Component_get_grid_vertex_count(
+  /* in */ c_Component self,
+  /* in */ int32_t grid,
+  /* out */ int32_t* n_vertices,
+  /* out */ sidl_BaseInterface *_ex);
+
+extern
+int32_t
+impl_c_Component_get_grid_face_count(
+  /* in */ c_Component self,
+  /* in */ int32_t grid,
+  /* out */ int32_t* n_faces,
+  /* out */ sidl_BaseInterface *_ex);
+
+extern
+int32_t
 impl_c_Component_get_grid_connectivity(
   /* in */ c_Component self,
   /* in */ int32_t grid,

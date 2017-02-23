@@ -1061,6 +1061,58 @@ impl_c_Component_get_grid_z(
 }
 
 /*
+ * Method:  get_grid_vertex_count[]
+ */
+
+#undef __FUNC__
+#define __FUNC__ "impl_c_Component_get_grid_vertex_count"
+
+#ifdef __cplusplus
+extern "C"
+#endif
+int32_t
+impl_c_Component_get_grid_vertex_count(
+  /* in */ c_Component self,
+  /* in */ int32_t grid,
+  /* out */ int32_t* n_vertices,
+  /* out */ sidl_BaseInterface *_ex)
+{
+  *_ex = 0;
+  {
+    /* DO-NOT-DELETE splicer.begin(c.Component.get_grid_vertex_count) */
+    BMI_Model * model = GET_BMI_MODEL(self);
+    return model->get_grid_vertex_count(model->self, grid, n_vertices);
+    /* DO-NOT-DELETE splicer.end(c.Component.get_grid_vertex_count) */
+  }
+}
+
+/*
+ * Method:  get_grid_face_count[]
+ */
+
+#undef __FUNC__
+#define __FUNC__ "impl_c_Component_get_grid_face_count"
+
+#ifdef __cplusplus
+extern "C"
+#endif
+int32_t
+impl_c_Component_get_grid_face_count(
+  /* in */ c_Component self,
+  /* in */ int32_t grid,
+  /* out */ int32_t* n_faces,
+  /* out */ sidl_BaseInterface *_ex)
+{
+  *_ex = 0;
+  {
+    /* DO-NOT-DELETE splicer.begin(c.Component.get_grid_face_count) */
+    BMI_Model * model = GET_BMI_MODEL(self);
+    return model->get_grid_face_count(model->self, grid, n_faces);
+    /* DO-NOT-DELETE splicer.end(c.Component.get_grid_face_count) */
+  }
+}
+
+/*
  * Method:  get_grid_connectivity[]
  */
 

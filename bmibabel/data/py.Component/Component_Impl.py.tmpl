@@ -586,6 +586,44 @@ class Component:
     return 0
 # DO-NOT-DELETE splicer.end(get_grid_z)
 
+  def get_grid_vertex_count(self, grid):
+    #
+    # sidl EXPECTED INCOMING TYPES
+    # ============================
+    # int grid
+    #
+
+    #
+    # sidl EXPECTED RETURN VALUE(s)
+    # =============================
+    # (_return, n_vertices)
+    # int _return
+    # int n_vertices
+    #
+
+# DO-NOT-DELETE splicer.begin(get_grid_vertex_count)
+    return (0, self._model.get_grid_vertex_count(grid))
+# DO-NOT-DELETE splicer.end(get_grid_vertex_count)
+
+  def get_grid_face_count(self, grid):
+    #
+    # sidl EXPECTED INCOMING TYPES
+    # ============================
+    # int grid
+    #
+
+    #
+    # sidl EXPECTED RETURN VALUE(s)
+    # =============================
+    # (_return, n_faces)
+    # int _return
+    # int n_faces
+    #
+
+# DO-NOT-DELETE splicer.begin(get_grid_face_count)
+    return (0, self._model.get_grid_face_count(grid))
+# DO-NOT-DELETE splicer.end(get_grid_face_count)
+
   def get_grid_connectivity(self, grid, connectivity):
     #
     # sidl EXPECTED INCOMING TYPES
