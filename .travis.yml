@@ -1,22 +1,48 @@
-env:
-  matrix:
-  - TRAVIS_PYTHON_VERSION="2.7"
-  global:
-  - THIS_PACKAGE=bmi-babel
-  - secure: ia+3Wgjj5fv//9HZiH/Sr8x9yYu4eWYgnxDX7vGHf02bPlm7tqbFrdyxdr6bUoDqvI/0F+Iw4eAOYOUcJ2kE5jzUcuvJygyK1kXwdVtQq00kioFNm25IMCkVfj1XFD2O4dDlqJbbuW/+9JgBs4M/uWfRPL/oMB/DAl+fhCn4VeA=
+language: generic
 os:
 - linux
 - osx
+env:
+  global:
+  - CONDA_PREFIX=$HOME/miniconda
+  - MINICONDA_URL_BASE="https://repo.continuum.io/miniconda/Miniconda3-latest"
+  - TRAVIS_PYTHON_VERSION="2.7"
+  - secure: ia+3Wgjj5fv//9HZiH/Sr8x9yYu4eWYgnxDX7vGHf02bPlm7tqbFrdyxdr6bUoDqvI/0F+Iw4eAOYOUcJ2kE5jzUcuvJygyK1kXwdVtQq00kioFNm25IMCkVfj1XFD2O4dDlqJbbuW/+9JgBs4M/uWfRPL/oMB/DAl+fhCn4VeA=
 sudo: false
+before_install:
+- |
+  if [[ $TRAVIS_OS_NAME == "osx" ]]; then
+    brew remove --force $(brew list)
+    brew cleanup -s
+    rm -rf $(brew --cache)
+  fi
 install:
-- bash .ci/travis/install_python.sh $HOME/miniconda
-- export PATH="$HOME/miniconda/bin:$PATH"
-- conda info -a
-- conda build -q conda-recipe -c conda-forge -c csdms/channel/dev
-- conda install -q $THIS_PACKAGE --use-local -c conda-forge -c csdms/channel/dev
-- pip install coveralls
+- |
+  if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    OS="MacOSX-x86_64"
+  else
+    OS="Linux-x86_64"
+  fi
+- curl $MINICONDA_URL_BASE-$OS.sh > $HOME/minconda.sh
+- bash $HOME/minconda.sh -b -p $CONDA_PREFIX
+- export PATH="$CONDA_PREFIX/bin:$PATH"
+- hash -r
+- conda config --set always_yes yes --set changeps1 no
+- conda config --add channels csdms-stack
+- conda config --add channels conda-forge
+- conda install python=$TRAVIS_PYTHON_VERSION
+- conda install -q conda-build anaconda-client sphinx
 script:
-- nosetests --with-doctest --with-coverage --cover-package=bmibabel bmibabel
+- conda build ./conda-recipe --no-test
+- conda install pymt nose coverage --use-local
+- nosetests --detailed-errors --exclude=examples --with-doctest --with-coverage --cover-package=pymt --verbosity=2 pymt
 after_success:
-- coveralls --verbose
-- bash .ci/travis/deploy_to_anaconda.sh $THIS_PACKAGE
+- |
+  if [[ $TRAVIS_OS_NAME == "linux" ]]; then
+    conda install -q coverage coveralls
+    coveralls --verbose
+  fi
+- curl https://raw.githubusercontent.com/csdms/ci-tools/master/anaconda_upload.py
+  > $HOME/anaconda_upload.py
+- echo $ANACONDA_TOKEN | python $HOME/anaconda_upload.py ./conda-recipe --channel=main --org=csdms
+  --token=-
