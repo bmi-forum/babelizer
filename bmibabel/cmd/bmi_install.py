@@ -6,7 +6,6 @@ import os
 import sys
 import re
 import argparse
-import warnings
 import shutil
 
 import yaml
