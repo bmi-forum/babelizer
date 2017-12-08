@@ -167,10 +167,13 @@ def find_java(env=None, hint=None):
 
 def setup_build_env(prefix):
     java_home = find_java(hint=babel_config('JAVAPREFIX'))
+    if not java_home:
+        warnings.warn('JAVA_HOME is not set.')
 
     build_env = {
         'PATH': os.pathsep.join(
             [os.path.join(sys.prefix, 'bin'),
+             java_home or '',
              '/usr/bin', '/bin',
              '/usr/sbin', '/etc', '/usr/lib']),
         'CC': babel_config('CC'),
@@ -179,13 +182,6 @@ def setup_build_env(prefix):
         'PKG_CONFIG_PATH': os.path.join(sys.prefix, 'lib', 'pkgconfig'),
         'PREFIX': prefix,
     }
-
-    if not java_home:
-        warnings.warn('JAVA_HOME is not set.')
-    else:
-        build_env['PATH'] = os.pathsep.join([
-            os.path.join(java_home, 'bin'),
-            build_env['PATH']])
 
     return build_env
 
